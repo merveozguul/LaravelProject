@@ -4,10 +4,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CartController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Müşteri Vitrini Ana Sayfası
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -27,7 +28,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         // Veritabanındaki toplam kayıt sayılarını alıp değişkenlere atıyoruz
         $totalProducts = \App\Models\Product::count();
         $totalCategories = \App\Models\Category::count();
-        $totalOrders = 0; // İleride sipariş tablosu eklenince saydıracağız
+        $totalOrders = \App\Models\Order::count();
 
         // compact() fonksiyonu ile bu verileri tasarıma (Blade) gönderiyoruz
         return view('admin.dashboard', compact('totalProducts', 'totalCategories', 'totalOrders'));
@@ -53,6 +54,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
         Route::delete('/delete/{product}', 'destroy')->name('destroy');
     });
 
+});
+
+// SEPET ROTALARI
+Route::prefix('cart')->name('cart.')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('index');          // cart.index
+    Route::post('/add/{product}', [CartController::class, 'add'])->name('add'); // cart.add
+    Route::post('/remove/{id}', [CartController::class, 'remove'])->name('remove'); // cart.remove
+    Route::post('/checkout', [CartController::class, 'checkout'])->middleware('auth')->name('checkout'); // cart.checkout
 });
 
 require __DIR__.'/auth.php';

@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            // Bu siparişi kim verdi? (Müşteri silinirse siparişleri de silinir)
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->decimal('total_price', 10, 2); // Siparişin toplam tutarı
-            $table->string('status')->default('pending'); // Sipariş durumu (pending, completed, cancelled)
+            // Siparişi veren kullanıcıyı users tablosuna bağlıyoruz
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            // Siparişin toplam tutarı
+            $table->decimal('total_amount', 10, 2);
+            // Sipariş durumu (Beklemede, Onaylandı, Kargolandı vb.)
+            $table->string('status')->default('Beklemede');
             $table->timestamps();
         });
     }
