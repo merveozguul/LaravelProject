@@ -21,7 +21,7 @@
             <a href="{{ route('admin.dashboard') }}">🏠 Dashboard</a>
             <a href="{{ route('admin.categories.index') }}">📁 Categories</a>
             <a href="{{ route('admin.product.index') }}">📦 Products</a>
-            <a href="#">🛒 Orders</a>
+            <a href="{{ route('admin.orders') }}" class="nav-link text-white">📦 Orders</a>
             <hr>
 
             <form action="{{ route('logout') }}" method="POST" class="d-inline mt-3">

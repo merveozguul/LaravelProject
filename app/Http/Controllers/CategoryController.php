@@ -39,7 +39,6 @@ class CategoryController extends Controller
         return redirect()->route('admin.categories.index')->with('success', 'Kategori başarıyla eklendi!');
     }
 
-    // (Düzenleme ve Silme fonksiyonlarını şimdilik boş bırakıyoruz, adım adım gideceğiz)
     // 4. Kategori Düzenleme Sayfası (Formu Gösterir)
     public function edit(Category $category)
     {

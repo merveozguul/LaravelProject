@@ -4,21 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Order; // Sipariş modelimizi dahil ediyoruz
+use App\Models\Order;
 
 class CartController extends Controller
 {
-    // 1. Sepet Sayfasını Listeler
     public function index()
     {
         $cart = session()->get('cart', []);
         return view('cart.index', compact('cart'));
     }
 
-    // 2. Sepete Ürün Ekler
+    // 2. Sepete Ürün Ekler (Stok Korumalı)
     public function add(Product $product)
     {
         $cart = session()->get('cart', []);
+
+        // Sepetteki mevcut miktarını bulalım (yoksa 0)
+        $currentQtyInCart = isset($cart[$product->id]) ? $cart[$product->id]['quantity'] : 0;
+
+        // Eklenecek olan miktar veritabanındaki stoktan fazla mı?
+        if (($currentQtyInCart + 1) > $product->stock) {
+            return redirect()->back()->with('error', "Üzgünüz, bu üründen stokta sadece {$product->stock} adet kalmış. Daha fazla ekleyemezsiniz!");
+        }
 
         if(isset($cart[$product->id])) {
             $cart[$product->id]['quantity']++;
@@ -35,7 +42,6 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Ürün sepete başarıyla eklendi!');
     }
 
-    // 3. Sepetten Ürün Siler
     public function remove($id)
     {
         $cart = session()->get('cart', []);
@@ -48,7 +54,7 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Ürün sepetten kaldırıldı!');
     }
 
-    // 4. Siparişi Onaylar ve MySQL Veritabanına Kaydeder
+    // 4. Siparişi Onaylar ve Stokları Azaltır
     public function checkout()
     {
         $cart = session()->get('cart', []);
@@ -57,23 +63,39 @@ class CartController extends Controller
             return redirect()->back()->with('error', 'Sepetiniz boş olduğu için sipariş verilemez.');
         }
 
-        // Toplam tutarı hesapla
+        // SON DAKİKA KONTROLÜ: Önce tüm sepeti stok açısından tarayalım
+        foreach ($cart as $id => $item) {
+            $product = Product::find($id);
+
+            // Eğer ürün silindiyse veya sepetteki miktar stoktan fazlaysa siparişi komple durdur
+            if (!$product || $item['quantity'] > $product->stock) {
+                return redirect()->route('cart.index')->with('error', "Sipariş esnasında bir hata oluştu! '{$item['name']}' ürünü için yetersiz stok veya ürün artık mevcut değil.");
+            }
+        }
+
+        // Şimdi siparişi kaydedip stokları düşelim.
         $totalAmount = 0;
         foreach ($cart as $item) {
             $totalAmount += $item['price'] * $item['quantity'];
         }
 
-        // Orders tablosuna siparişi kaydet
+        // Siparişi oluştur
         Order::create([
             'user_id' => auth()->id(),
             'total_amount' => $totalAmount,
             'status' => 'Beklemede'
         ]);
 
-        // Sepeti boşalt
+        // VERİTABANINDAN STOKLARI DÜŞÜYORUZ
+        foreach ($cart as $id => $item) {
+            $product = Product::find($id);
+            $product->stock = $product->stock - $item['quantity'];
+            $product->save(); // Yeni stoğu MySQL'e kaydettik
+        }
+
+        // Sepeti temizle
         session()->forget('cart');
 
-        // Kullanıcıyı teşekkür mesajıyla ana sayfaya fırlat
-        return redirect()->route('home')->with('success', 'Siparişiniz başarıyla alındı! Teşekkür ederiz.');
+        return redirect()->route('home')->with('success', 'Siparişiniz başarıyla alındı! Stoklar güncellendi.');
     }
 }

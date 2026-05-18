@@ -75,6 +75,15 @@
     </div>
 @endif
 
+@if(session('error'))
+    <div class="container mt-3">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            ❌ {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+@endif
+
 <header class="bg-primary text-white text-center py-5 mb-5 shadow-sm">
     <div class="container">
         <h1 class="display-4 fw-bold">Hoş Geldiniz!</h1>
