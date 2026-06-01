@@ -61,20 +61,30 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $product->update([
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'stock' => $request->stock,
-        ]);
+        $data = $request->all();
+
+        // 🌟 EĞER YENİ BİR FOTOĞRAF YÜKLENDİYSE:
+        if ($request->hasFile('image')) {
+            // Eski fotoğraf varsa ve klasörde duruyorsa temizlik yapıp bilgisayardan siliyoruz
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+
+            // Yeni fotoğrafı benzersiz bir isimle kaydediyoruz
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('uploads/products'), $imageName);
+
+            $data['image'] = 'uploads/products/' . $imageName;
+        }
+
+        // Verileri güncelliyoruz
+        $product->update($data);
 
         return redirect()->route('admin.product.index')->with('success', 'Ürün başarıyla güncellendi!');
     }

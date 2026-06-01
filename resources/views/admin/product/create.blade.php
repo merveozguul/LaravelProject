@@ -12,8 +12,13 @@
 
     <div class="card shadow">
         <div class="card-body">
-            <form action="{{ route('admin.product.store') }}" method="POST">
+            <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+
+                <div class="mb-3">
+                    <label for="image" class="form-label fw-bold">Ürün Fotoğrafı</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                </div>
 
                 <div class="mb-3">
                     <label class="form-label">Kategori Seçin</label>
@@ -39,6 +44,11 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Fiyat (TL)</label>
                         <input type="number" step="0.01" name="price" class="form-control" required placeholder="Örn: 1250.50">
+                    </div>
+                    <div class="mb-3">
+                        <label for="discount_rate" class="form-label fw-bold">Discount Rate (%)</label>
+                        <input type="number" class="form-control" id="discount_rate" name="discount_rate" min="0" max="100" value="0">
+                        <small class="text-muted">Leave 0 if you don't want to apply a discount.</small>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Stok Adedi</label>

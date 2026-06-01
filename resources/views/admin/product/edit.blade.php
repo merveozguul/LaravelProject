@@ -12,7 +12,7 @@
 
     <div class="card shadow">
         <div class="card-body">
-            <form action="{{ route('admin.product.update', $product->id) }}" method="POST">
+            <form action="{{ route('admin.product.update', $product) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -42,9 +42,29 @@
                         <label class="form-label">Fiyat (TL)</label>
                         <input type="number" step="0.01" name="price" class="form-control" required value="{{ $product->price }}">
                     </div>
+                    <div class="mb-3">
+                        <label for="discount_rate" class="form-label fw-bold">İndirim Oranı (%)</label>
+                        <input type="number" class="form-control" id="discount_rate" name="discount_rate" min="0" max="100" value="{{ $product->discount_rate ?? 0 }}">
+                        <small class="text-muted">İndirim uygulamak istemiyorsanız 0 bırakın.</small>
+                    </div>
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Stok Adedi</label>
                         <input type="number" name="stock" class="form-control" required value="{{ $product->stock }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label fw-bold">Ürün Fotoğrafı</label>
+
+                        <!-- Eğer ürünün halihazırda bir resmi varsa burada küçük bir önizleme gösteriyoruz -->
+                        @if($product->image && file_exists(public_path($product->image)))
+                            <div class="mb-2">
+                                <img src="{{ asset($product->image) }}" alt="Mevcut Resim" class="img-thumbnail" style="max-height: 100px;">
+                                <p class="text-muted small">Mevcut Ürün Fotoğrafı</p>
+                            </div>
+                        @endif
+
+                        <!-- Yeni resim seçme alanı -->
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        <small class="text-muted">Fotoğrafı değiştirmek istemiyorsanız boş bırakabilirsiniz.</small>
                     </div>
                 </div>
 

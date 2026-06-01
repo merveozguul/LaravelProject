@@ -18,6 +18,9 @@
         <div class="col-md-2 sidebar p-3">
             <h4 class="text-center mb-4">⚙️ Admin Panel</h4>
             <hr>
+            <a class="btn btn-outline-success btn-sm text-white me-2" href="{{ route('home') }}" target="_blank">
+                <i class="fa-solid fa-store me-1"></i> Go to the Store
+            </a>
             <a href="{{ route('admin.dashboard') }}">🏠 Dashboard</a>
             <a href="{{ route('admin.categories.index') }}">📁 Categories</a>
             <a href="{{ route('admin.product.index') }}">📦 Products</a>

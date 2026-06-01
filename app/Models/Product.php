@@ -14,6 +14,7 @@ class Product extends Model
         'price',
         'stock',
         'image',
+        'discount_rate',
     ];
 
     // Bu ürünün ait olduğu kategori ilişkisi
