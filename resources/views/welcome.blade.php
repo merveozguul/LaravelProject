@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,41 +12,27 @@
             background-color: #f4f5f7;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .navbar {
-            background-color: #ffffff !important;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .navbar-brand {
-            font-weight: 800;
-            letter-spacing: -1px;
+
+        /* Merve Shop Header Color and Transition Settings */
+        .text-orange {
             color: #f27a1a !important;
         }
-        /* Slider Ayarları */
+        .border-orange {
+            border-color: #f27a1a !important;
+        }
+        .hover-orange:hover {
+            color: #f27a1a !important;
+            transition: color 0.1s ease-in-out;
+        }
+
+        /* Slider Settings */
         .carousel-item img {
             height: 400px;
             object-fit: cover;
             border-radius: 16px;
         }
-        /* Kategori Butonları */
-        .category-badge {
-            background-color: #ffffff;
-            color: #4a5568;
-            border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 10px 20px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .category-badge:hover, .category-badge.active {
-            background-color: #f27a1a;
-            color: #ffffff;
-            border-color: #f27a1a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(242, 122, 26, 0.2);
-        }
-        /* Modern Ürün Kartları */
+
+        /* Modern Product Cards */
         .product-card {
             background: #ffffff;
             border: none;
@@ -123,70 +109,114 @@
             background-color: #f27a1a;
             color: #ffffff;
         }
+
+        /* 🌟 Sihirli Gizleme Sınıfı (Grid yapısını bozmadan tam gizleme sağlar) */
+        .hide-product-card {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg sticky-top shadow-sm py-3">
-    <div class="container">
-        <a class="navbar-brand fs-3" href="{{ route('home') }}"><i class="fa-solid fa-bag-shopping me-2"></i>merve<span style="color: #1e293b;">shop</span></a>
+<header class="bg-white border-bottom shadow-sm sticky-top">
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <div class="bg-light py-1 border-bottom d-none d-md-block" style="font-size: 11px;">
+        <div class="container d-flex justify-content-end gap-3 text-secondary">
+            <a href="{{ route('my.coupons') }}" class="text-secondary text-decoration-none hover-orange">My Discount Coupons</a>
+            <a href="{{ route('about.us') }}" class="text-secondary text-decoration-none hover-orange">About Us</a>
+            <a href="{{ route('help.support') }}" class="text-secondary text-decoration-none hover-orange"><i class="fa-solid fa-headset me-1"></i> Help & Support</a>
+        </div>
+    </div>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <form class="d-flex mx-auto w-50 d-none d-lg-flex">
-                <div class="input-group">
-                    <input type="text" class="form-control border-end-0 bg-light" placeholder="Enter the product, category, or brand you are looking for..." style="border-radius: 8px 0 0 8px;">
-                    <button class="btn btn-light border border-start-0 text-muted" type="button" style="border-radius: 0 8px 8px 0;">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+    <div class="container py-3">
+        <div class="row align-items-center">
+
+            <div class="col-6 col-md-2">
+                <a class="fs-2 fw-bolder text-dark text-decoration-none" href="{{ route('home') }}" style="letter-spacing: -1px; font-family: 'Arial Black', sans-serif;">
+                    merve<span class="text-orange">shop</span>
+                </a>
+            </div>
+
+            <div class="col-12 col-md-6 order-3 order-md-2 mt-2 mt-md-0">
+                <div class="input-group" style="background-color: #f3f3f3; border-radius: 6px; overflow: hidden;">
+                    <input type="text" class="form-control border-0 bg-transparent py-2 ps-3" placeholder="Search for products, categories or brands" style="font-size: 14px; box-shadow: none;">
+                    <button class="btn bg-transparent border-0 text-orange fw-bold px-3" type="button">
+                        <i class="fa-solid fa-magnifying-glass fs-5" style="color: #f27a1a;"></i>
                     </button>
                 </div>
-            </form>
+            </div>
 
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item me-3">
-                    <a class="nav-link position-relative fw-semibold text-dark fs-5" href="{{ route('cart.index') }}">
-                        <i class="fa-solid fa-cart-shopping text-muted me-1"></i> Shopping Cart
-                        @if(session('cart') && count(session('cart')) > 0)
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.7rem;">
-                                {{ array_sum(array_column(session('cart'), 'quantity')) }}
-                            </span>
-                        @endif
-                    </a>
-                </li>
+            <div class="col-6 col-md-4 order-2 order-md-3 d-flex justify-content-end align-items-center gap-4" style="font-size: 14px;">
 
                 @auth
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-semibold text-dark btn btn-light px-3" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fa-regular fa-user me-1"></i> {{ auth()->user()->name }}
+                    <div class="dropdown">
+                        <a class="text-dark text-decoration-none fw-semibold dropdown-toggle btn btn-light btn-sm px-2" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-regular fa-user me-2 fs-5 text-secondary"></i>My Account
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                            <li class="px-3 py-1 text-muted small">Hello, {{ auth()->user()->name }}</li>
                             @if(auth()->user()->hasRole('admin'))
-                                <li><a class="dropdown-menu-item dropdown-item fw-bold text-primary" href="{{ route('admin.dashboard') }}"><i class="fa-solid fa-sliders me-2"></i>Admin Paneli</a></li>
-                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item fw-bold text-primary" href="{{ route('admin.dashboard') }}"><i class="fa-solid fa-sliders me-2"></i>Admin Panel</a></li>
                             @endif
+                            <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" class="dropdown-item text-danger"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Çıkış Yap</button>
+                                    <button type="submit" class="dropdown-item text-danger"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Log Out</button>
                                 </form>
                             </li>
                         </ul>
-                    </li>
+                    </div>
                 @else
-                    <li class="nav-item">
-                        <a class="btn btn-outline-dark fw-semibold px-4 me-2" href="{{ route('login') }}" style="border-radius: 8px;">Giriş Yap</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-orange text-white fw-semibold px-4" href="{{ route('register') }}" style="background-color: #f27a1a; border-radius: 8px;">Üye Ol</a>
-                    </li>
+                    <a href="{{ route('login') }}" class="text-dark text-decoration-none fw-semibold hover-orange">
+                        <i class="fa-regular fa-user me-2 fs-5 text-secondary"></i>Log In
+                    </a>
                 @endauth
-            </ul>
+
+                <a href="{{ route('my.favorites') }}" class="text-dark text-decoration-none fw-semibold hover-orange d-none d-sm-inline">
+                    <i class="fa-regular fa-heart me-2 fs-5 text-secondary"></i>My Favorites
+                </a>
+
+                <a href="{{ route('cart.index') }}" class="text-dark text-decoration-none fw-semibold hover-orange position-relative">
+                    <i class="fa-solid fa-cart-shopping me-2 fs-5 text-secondary"></i>My Cart
+                    @if(session('cart') && count(session('cart')) > 0)
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px; padding: 3px 6px;">
+                            {{ array_sum(array_column(session('cart'), 'quantity')) }}
+                        </span>
+                    @endif
+                </a>
+
+            </div>
         </div>
     </div>
-</nav>
+
+    <div class="border-top d-none d-lg-block">
+        <div class="container">
+            <div class="d-flex justify-content-center align-items-center fw-bold text-secondary py-2 gap-4" style="font-size: 13px;">
+
+                <a href="#" class="text-dark text-decoration-none hover-orange category-filter-btn" onclick="filterProducts('all', this)">
+                    All Products
+                </a>
+
+                @foreach($categories as $category)
+                    <a href="#" class="text-dark text-decoration-none hover-orange category-filter-btn" onclick="filterProducts('cat-{{ $category->id }}', this)">
+                        {{ $category->name }}
+                    </a>
+                @endforeach
+
+                <a href="#" class="text-dark text-decoration-none hover-orange category-filter-btn" onclick="filterProducts('flash', this)">
+                    Flash Products <span class="badge bg-danger ms-1" style="font-size: 9px; padding: 2px 4px;">New</span>
+                </a>
+
+                <a href="#" class="text-dark text-decoration-none hover-orange category-filter-btn" onclick="filterProducts('best', this)">
+                    Best Sellers <span class="badge bg-danger ms-1" style="font-size: 9px; padding: 2px 4px;">New</span>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+</header>
 
 @if(session('success'))
     <div class="container mt-3">
@@ -214,7 +244,7 @@
         </div>
         <div class="carousel-inner text-white">
             <div class="carousel-item active">
-                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1200&auto=format&fit=crop" class="d-block w-100" alt="Büyük Yaz İndirimi">
+                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1200&auto=format&fit=crop" class="d-block w-100" alt="Big Season Sale">
                 <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-50 p-4 rounded-3" style="max-width: 450px; bottom: 40px; left: 40px;">
                     <span class="badge bg-danger mb-2 fs-6">AN OPPORTUNITY NOT TO BE MISSED</span>
                     <h3 class="fw-bold">The Big Season Sale Has Begun!</h3>
@@ -222,7 +252,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop" class="d-block w-100" alt="Elektronik Fırsatları">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop" class="d-block w-100" alt="Technology Days">
                 <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-50 p-4 rounded-3" style="max-width: 450px; bottom: 40px; left: 40px;">
                     <span class="badge bg-warning text-dark mb-2 fs-6">TECHNOLOGY DAYS</span>
                     <h3 class="fw-bold">The Technology of the Future is Here</h3>
@@ -230,7 +260,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop" class="d-block w-100" alt="Moda Trendleri">
+                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop" class="d-block w-100" alt="Fashion Trends">
                 <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-50 p-4 rounded-3" style="max-width: 450px; bottom: 40px; left: 40px;">
                     <span class="badge bg-success mb-2 fs-6">NEW SEASON</span>
                     <h3 class="fw-bold">Show your style.</h3>
@@ -247,57 +277,52 @@
     </div>
 
     <div class="mb-5">
-        <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-border-all text-muted me-2"></i> Explore the Category</h4>
-        <div class="d-flex flex-wrap gap-2">
-            <a href="#" class="category-badge active">All Products</a>
-            @foreach($categories as $category)
-                <a href="#" class="category-badge">
-                    {{ $category->name }}
-                </a>
-            @endforeach
-        </div>
-    </div>
-
-    <div class="mb-5">
         <h4 class="fw-bold text-dark mb-4"><i class="fa-solid fa-fire text-danger me-2"></i> Our Selections for You</h4>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
             @forelse($products as $product)
-                <div class="col">
-                    <div class="card product-card p-2">
-                        <div class="product-img-container">
-                            @if($product->discount_rate > 0)
-                                <span class="badge badge-discount bg-danger text-white position-absolute" style="top: 10px; left: 10px; z-index: 10;">
-                                    %{{ $product->discount_rate }} Discount
-                                </span>
-                            @endif
+                <div class="col product-item-card"
+                     data-category="cat-{{ $product->category_id }}"
+                     data-discount="{{ $product->discount_rate }}"
+                     data-stock="{{ $product->stock }}">
 
-                            @if($product->image)
-                                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
-                                <!-- Eğer resim hiç yüklenmediyse şık ikonlarımız devreye giriyor -->
-                                @if(str_contains(strtolower($product->category->name ?? ''), 'elektronik'))
-                                    <i class="fa-solid fa-headphones product-img-placeholder"></i>
-                                @else
-                                    <i class="fa-solid fa-box-open product-img-placeholder"></i>
+                    <div class="card product-card p-2">
+                        <a href="{{ route('product.detail', $product) }}" class="text-decoration-none">
+                            <div class="product-img-container">
+                                @if($product->discount_rate > 0)
+                                    <span class="badge badge-discount bg-danger text-white position-absolute" style="top: 10px; left: 10px; z-index: 10;">
+                                        %{{ $product->discount_rate }} Discount
+                                    </span>
                                 @endif
-                            @endif
-                        </div>
+
+                                @if($product->image)
+                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
+                                @else
+                                    @if(str_contains(strtolower($product->category->name ?? ''), 'elektronik'))
+                                        <i class="fa-solid fa-headphones product-img-placeholder"></i>
+                                    @else
+                                        <i class="fa-solid fa-box-open product-img-placeholder"></i>
+                                    @endif
+                                @endif
+                            </div>
+                        </a>
 
                         <div class="card-body px-1 py-3 d-flex flex-column justify-content-between flex-grow-1">
                             <div>
-                                <span class="text-muted small fw-bold text-uppercase">{{ $product->category->name ?? 'Genel' }}</span>
-                                <h5 class="product-title mt-1 mb-2" title="{{ $product->name }}">
-                                    <strong>{{ $product->name }}</strong> {{ $product->description }}
-                                </h5>
+                                <span class="text-muted small fw-bold text-uppercase">{{ $product->category->name ?? 'General' }}</span>
+                                <a href="{{ route('product.detail', $product) }}" class="text-decoration-none text-dark">
+                                    <h5 class="product-title mt-1 mb-2" title="{{ $product->name }}">
+                                        <strong>{{ $product->name }}</strong> {{ $product->description }}
+                                    </h5>
+                                </a>
 
                                 <div class="mb-2">
                                     @if($product->stock > 5)
-                                        <span class="badge bg-light text-success border border-success-subtle"><i class="fa-solid fa-check me-1"></i> Stokta Var ({{ $product->stock }})</span>
+                                        <span class="badge bg-light text-success border border-success-subtle"><i class="fa-solid fa-check me-1"></i> In Stock ({{ $product->stock }})</span>
                                     @elseif($product->stock > 0)
-                                        <span class="badge bg-light text-warning border border-warning-subtle"><i class="fa-solid fa-triangle-exclamation me-1"></i> Son {{ $product->stock }} Ürün!</span>
+                                        <span class="badge bg-light text-warning border border-warning-subtle"><i class="fa-solid fa-triangle-exclamation me-1"></i> Only {{ $product->stock }} Left!</span>
                                     @else
-                                        <span class="badge bg-light text-danger border border-danger-subtle"><i class="fa-solid fa-xmark me-1"></i> Tükendi</span>
+                                        <span class="badge bg-light text-danger border border-danger-subtle"><i class="fa-solid fa-xmark me-1"></i> Out of Stock</span>
                                     @endif
                                 </div>
                             </div>
@@ -308,7 +333,6 @@
                                         <span class="text-muted text-decoration-line-through small me-2">
                                             {{ number_format($product->price, 2) }} TL
                                         </span>
-
                                         <span class="product-price fw-bold" style="color: #f27a1a; font-size: 1.3rem;">
                                             {{ number_format($product->price * (1 - $product->discount_rate / 100), 2) }} TL
                                         </span>
@@ -319,23 +343,27 @@
                                     @endif
                                 </div>
 
-                                @if($product->stock > 0)
-                                    <form action="{{ route('cart.add', $product) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-add-to-cart py-2 fs-6">
-                                            <i class="fa-solid fa-cart-plus me-2"></i> Add to Cart
+                                <div class="d-flex gap-2">
+                                    @if($product->stock > 0)
+                                        <form action="{{ route('cart.add', $product) }}" method="POST" class="flex-grow-1">
+                                            @csrf
+                                            <button type="submit" class="btn btn-add-to-cart py-2 fs-6 w-100">
+                                                <i class="fa-solid fa-cart-plus me-1"></i> Add
+                                            </button>
+                                        </form>
+                                    @else
+                                        <button class="btn btn-secondary py-2 text-white fw-semibold flex-grow-1" disabled style="border-radius: 8px; font-size: 0.9rem;">
+                                            Out of Stock
                                         </button>
-                                    </form>
-                                @else
-                                    <button class="btn btn-secondary py-2 w-100 text-white fw-semibold" disabled style="border-radius: 8px;">
-                                        <i class="fa-solid fa-ban me-2"></i> Out of Stock
+                                    @endif
+
+                                    <button class="btn btn-outline-danger py-2 px-3 wishlist-btn" style="border-radius: 8px;" onclick="toggleWishlist(this)">
+                                        <i class="fa-regular fa-heart"></i>
                                     </button>
-                                @endif
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            @empty
+                    </div> </div> @empty
                 <div class="col-12 text-center py-5">
                     <div class="text-muted fs-3 mb-2"> Our store is still empty.</div>
                     <p class="text-secondary">You can add new products right from the admin panel!</p>
@@ -353,5 +381,65 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function toggleWishlist(button) {
+        const isLoggedIn = @json(auth()->check());
+
+        if (!isLoggedIn) {
+            alert("Please log in to add products to your favorites.");
+            return;
+        }
+
+        const icon = button.querySelector('i');
+        if (icon.classList.contains('fa-regular')) {
+            icon.classList.remove('fa-regular', 'fa-heart');
+            icon.classList.add('fa-solid', 'fa-heart');
+            button.style.backgroundColor = '#fff0f0';
+            button.style.borderColor = '#ff4d4f';
+        } else {
+            icon.classList.remove('fa-solid', 'fa-heart');
+            icon.classList.add('fa-regular', 'fa-heart');
+            button.style.backgroundColor = '';
+            button.style.borderColor = '';
+        }
+    }
+
+    function filterProducts(filterType, element) {
+        document.querySelectorAll('.category-filter-btn').forEach(btn => {
+            btn.classList.remove('text-orange', 'border-bottom', 'border-2', 'border-orange', 'pb-2');
+        });
+        element.classList.add('text-orange', 'border-bottom', 'border-2', 'border-orange', 'pb-2');
+
+        const products = document.querySelectorAll('.product-item-card');
+
+        products.forEach(product => {
+            const productCat = product.getAttribute('data-category');
+            const productDiscount = parseFloat(product.getAttribute('data-discount')) || 0;
+            const productStock = parseInt(product.getAttribute('data-stock')) || 0;
+
+            let shouldShow = false;
+
+            if (filterType === 'all') {
+                shouldShow = true;
+            }
+            else if (filterType === 'flash') {
+                if (productDiscount >= 20) shouldShow = true;
+            }
+            else if (filterType === 'best') {
+                if (productStock > 5) shouldShow = true;
+            }
+            else {
+                if (productCat === filterType) shouldShow = true;
+            }
+
+            // 🌟 CSS sınıfını tetikleyerek jilet gibi yan yana dizilimi koruyoruz
+            if (shouldShow) {
+                product.classList.remove('hide-product-card');
+            } else {
+                product.classList.add('hide-product-card');
+            }
+        });
+    }
+</script>
 </body>
 </html>

@@ -19,4 +19,32 @@ class HomeController extends Controller
         // 3. kategori eklendi
         return view('welcome', compact('products', 'categories'));
     }
+
+    public function aboutUs()
+    {
+        return view('about_us');
+    }
+
+    public function helpSupport()
+    {
+        return view('help_support');
+    }
+
+    public function myCoupons()
+    {
+        return view('my_coupons');
+    }
+
+    public function productDetail(Product $product)
+    {
+        // İlişkili kategoriyi ve diğer ürünleri de çekebilmek için ürünü gönderiyoruz
+        return view('product_detail', compact('product'));
+    }
+
+    public function myFavorites()
+    {
+        // Şimdilik sayfayı doldurmak için mağazadaki mevcut ürünleri favoriymiş gibi listeleyelim
+        $products = \App\Models\Product::take(2)->get();
+        return view('my_favorites', compact('products'));
+    }
 }

@@ -65,4 +65,9 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::post('/checkout', [CartController::class, 'checkout'])->middleware('auth')->name('checkout');
 });
 
+Route::get('/about-us', [App\Http\Controllers\HomeController::class, 'aboutUs'])->name('about.us');
+Route::get('/help-and-support', [App\Http\Controllers\HomeController::class, 'helpSupport'])->name('help.support');
+Route::get('/my-discount-coupons', [App\Http\Controllers\HomeController::class, 'myCoupons'])->middleware('auth')->name('my.coupons');
+Route::get('/product/{product}', [App\Http\Controllers\HomeController::class, 'productDetail'])->name('product.detail');
+Route::get('/my-favorites', [App\Http\Controllers\HomeController::class, 'myFavorites'])->middleware('auth')->name('my.favorites');
 require __DIR__.'/auth.php';
