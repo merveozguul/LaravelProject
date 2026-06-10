@@ -110,9 +110,24 @@
             color: #ffffff;
         }
 
-        /* 🌟 Sihirli Gizleme Sınıfı (Grid yapısını bozmadan tam gizleme sağlar) */
         .hide-product-card {
             display: none !important;
+        }
+
+        #promoSlider .carousel-control-prev {
+            left: -50px !important;
+        }
+
+        #promoSlider .carousel-control-next {
+            right: -50px !important;
+        }
+
+        #promoSlider .carousel-control-prev-icon,
+        #promoSlider .carousel-control-next-icon {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 50%;
+            background-size: 50%;
         }
     </style>
 </head>
@@ -241,16 +256,24 @@
             <button type="button" data-bs-target="#promoSlider" data-bs-slide-to="0" class="active"></button>
             <button type="button" data-bs-target="#promoSlider" data-bs-slide-to="1"></button>
             <button type="button" data-bs-target="#promoSlider" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#promoSlider" data-bs-slide-to="3"></button> <!-- Yeni eklenen 4. nokta -->
         </div>
         <div class="carousel-inner text-white">
+
+            <!--13-17 Haziran Babalar Günü-->
             <div class="carousel-item active">
-                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1200&auto=format&fit=crop" class="d-block w-100" alt="Big Season Sale">
+                <img src="{{ asset('uploads/sliders/fathers-day-brand-days.png') }}" class="d-block w-100" alt="Father's Day Brand Days">
+            </div>
+
+            <div class="carousel-item">
+                <img src="{{ asset('uploads/sliders/sale-banner.jpg') }}" class="d-block w-100" alt="Season Sale">
                 <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-50 p-4 rounded-3" style="max-width: 450px; bottom: 40px; left: 40px;">
                     <span class="badge bg-danger mb-2 fs-6">AN OPPORTUNITY NOT TO BE MISSED</span>
                     <h3 class="fw-bold">The Big Season Sale Has Begun!</h3>
                     <p>Discover massive discounts of up to 50% on select products across all categories.</p>
                 </div>
             </div>
+
             <div class="carousel-item">
                 <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop" class="d-block w-100" alt="Technology Days">
                 <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-50 p-4 rounded-3" style="max-width: 450px; bottom: 40px; left: 40px;">
@@ -259,12 +282,13 @@
                     <p>The latest generation of headphones, smart devices, and accessories with interest-free installment options.</p>
                 </div>
             </div>
+
             <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop" class="d-block w-100" alt="Fashion Trends">
+                <img src="{{ asset('uploads/sliders/summer-season.jpg') }}" class="d-block w-100" alt="Summer">
                 <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-50 p-4 rounded-3" style="max-width: 450px; bottom: 40px; left: 40px;">
                     <span class="badge bg-success mb-2 fs-6">NEW SEASON</span>
                     <h3 class="fw-bold">Show your style.</h3>
-                    <p>The trendiest street style outfits and combinations are delivered to your door with Merve Shop quality.</p>
+                    <p>The trendiest summer style outfits and combinations are delivered to your door with Merve Shop quality.</p>
                 </div>
             </div>
         </div>
