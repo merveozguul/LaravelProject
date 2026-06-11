@@ -7,8 +7,8 @@
 </head>
 <body class="bg-light p-5">
 <div class="container">
-    <h2>Yeni Ürün Ekle</h2>
-    <a href="{{ route('admin.product.index') }}" class="btn btn-secondary mb-3">⬅ Listeye Dön</a>
+    <h2>Add New Product</h2>
+    <a href="{{ route('admin.product.index') }}" class="btn btn-secondary mb-3">⬅ Return to List</a>
 
     <div class="card shadow">
         <div class="card-body">
@@ -16,14 +16,14 @@
                 @csrf
 
                 <div class="mb-3">
-                    <label for="image" class="form-label fw-bold">Ürün Fotoğrafı</label>
+                    <label for="image" class="form-label fw-bold">Product Photo</label>
                     <input type="file" class="form-control" id="image" name="image" accept="image/*">
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Kategori Seçin</label>
+                    <label class="form-label">Select a Category</label>
                     <select name="category_id" class="form-select" required>
-                        <option value="">-- Kategori Seçiniz --</option>
+                        <option value="">-- Select a Category --</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
@@ -31,32 +31,56 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Ürün Adı</label>
-                    <input type="text" name="name" class="form-control" required placeholder="Örn: Kablosuz Kulaklık">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" name="name" class="form-control" required placeholder="Example: Wireless Headphones">
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Açıklama</label>
-                    <textarea name="description" class="form-control" rows="3" placeholder="Ürün özellikleri..."></textarea>
+                    <label class="form-label">Explanation</label>
+                    <textarea name="description" class="form-control" rows="3" placeholder="Product features..."></textarea>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Fiyat (TL)</label>
-                        <input type="number" step="0.01" name="price" class="form-control" required placeholder="Örn: 1250.50">
+                        <label class="form-label">Price (TL)</label>
+                        <input type="number" step="0.01" name="price" class="form-control" required placeholder="Example: 1250.50">
                     </div>
+
                     <div class="mb-3">
                         <label for="discount_rate" class="form-label fw-bold">Discount Rate (%)</label>
                         <input type="number" class="form-control" id="discount_rate" name="discount_rate" min="0" max="100" value="0">
                         <small class="text-muted">Leave 0 if you don't want to apply a discount.</small>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Stok Adedi</label>
-                        <input type="number" name="stock" class="form-control" required placeholder="Örn: 50">
+                        <label class="form-label">Stock Quantity</label>
+                        <input type="number" name="stock" class="form-control" required placeholder="Example: 50">
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="brand" class="form-label fw-bold">Brand</label>
+                            <input type="text" name="brand" id="brand" class="form-control" placeholder="e.g. Nike, Apple, Samsung">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="color" class="form-label fw-bold">Color</label>
+                            <input type="text" name="color" id="color" class="form-control" placeholder="e.g. Black, White, Red">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="size" class="form-label fw-bold">Size</label>
+                            <select name="size" id="size" class="form-select">
+                                <option value="">Choose Size (Optional)</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="Free Size">Free Size</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-success w-100">Ürünü Kaydet</button>
+                <button type="submit" class="btn btn-success w-100">Save Product</button>
             </form>
         </div>
     </div>

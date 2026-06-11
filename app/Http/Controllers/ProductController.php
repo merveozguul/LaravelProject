@@ -9,11 +9,59 @@ use App\Models\Category; // Ürün eklerken kategorileri seçtirebilmek için Ka
 class ProductController extends Controller
 {
     // 1. Ürünleri Listeleme Sayfası
-    public function index()
+    // 🛒 1. FONKSİYON: Ziyaretçilerin gördüğü Müşteri Ana Sayfası
+    public function index(Request $request)
     {
-        // Ürünleri çekerken yanlarında kategorilerini de getir (with ile performanslı çekim yapıyoruz)
-        $products = Product::with('category')->get();
-        return view('admin.product.index', compact('products'));
+        $categories = \App\Models\Category::all();
+        $query = \App\Models\Product::query()->with('category');
+
+        // Kategori Filtresi
+        if ($request->has('category_id') && $request->filled('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        // Arama Motoru
+        if ($request->has('search') && $request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('description', 'LIKE', "%{$searchTerm}%");
+            });
+        }
+
+        // Marka, Renk, Beden Filtreleri
+        if ($request->has('brand') && $request->filled('brand')) { $query->whereIn('brand', $request->input('brand')); }
+        if ($request->has('color') && $request->filled('color')) { $query->whereIn('color', $request->input('color')); }
+        if ($request->has('size') && $request->filled('size')) { $query->whereIn('size', $request->input('size')); }
+
+        // Sıralama Motoru
+        $sort = $request->input('sort', 'recommended');
+        switch ($sort) {
+            case 'price_low': $query->orderBy('price', 'asc'); break;
+            case 'price_high': $query->orderBy('price', 'desc'); break;
+            case 'newest': $query->orderBy('created_at', 'desc'); break;
+            default: $query->orderBy('id', 'desc'); break;
+        }
+
+        $products = $query->get();
+        $brands = \App\Models\Product::distinct()->pluck('brand')->filter();
+        $colors = \App\Models\Product::distinct()->pluck('color')->filter();
+
+        // 🌟 Burası MÜŞTERİYİ ana sayfaya (welcome) gönderiyor
+        return view('welcome', compact('products', 'categories', 'brands', 'colors'));
+    }
+
+
+// 🛠️ 2. FONKSİYON: Sadece Admin Panelindeki Ürün Listesi İçin
+    public function adminIndex()
+    {
+        // Admin panelinde filtre karmaşasına gerek yok, tüm ürünleri listelesin
+        $products = \App\Models\Product::with('category')->latest()->get();
+        $brands = \App\Models\Product::distinct()->pluck('brand')->filter();
+        $colors = \App\Models\Product::distinct()->pluck('color')->filter();
+
+        // 🌟 Burası ADMİNİ paneldeki listeye (admin.products.index) gönderiyor
+        return view('admin.product.index', compact('products', 'brands', 'colors'));
     }
 
     // 2. Yeni Ürün Ekleme Sayfası
@@ -34,19 +82,15 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0', // Fiyat sayı olmalı ve 0'dan küçük olamaz
             'stock' => 'required|integer|min:0', // Stok tam sayı olmalı
+            'brand' => 'nullable|string|max:255',
+            'color' => 'nullable|string|max:255',
+            'size' => 'nullable|string|max:255',
         ]);
 
         // Veritabanına ürünü kaydet
-        Product::create([
-            'category_id' => $request->category_id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'stock' => $request->stock,
-        ]);
+        Product::create($request->all());
 
-        // İşlem bitince ürün listesine yönlendir ve başarı mesajı ver
-        return redirect()->route('admin.product.index')->with('success', 'Ürün başarıyla eklendi!');
+        return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
     }
 
     // 4. Ürün Düzenleme Sayfası (Formu Gösterir)

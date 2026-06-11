@@ -45,7 +45,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 
     // Ürün Rotaları
     Route::prefix('product')->name('product.')->controller(ProductController::class)->group(function () {
-        Route::get('/', 'index')->name('index');
+        Route::get('/', 'adminIndex')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/edit/{product}', 'edit')->name('edit');

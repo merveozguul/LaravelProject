@@ -19,7 +19,7 @@ class AdminUserSeeder extends Seeder
             ['email' => 'admin@mysite.com'], // Giriş e-postam
             [
                 'name' => 'Admin User',
-                'password' => Hash::make('12345'), // Giriş şifrem: 12345
+                'password' => Hash::make('12345678'), // Giriş şifrem: 12345678
             ]
         );
 

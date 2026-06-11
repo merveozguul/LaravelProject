@@ -15,6 +15,11 @@ class Product extends Model
         'stock',
         'image',
         'discount_rate',
+        'sales_count',
+        'fav_count',
+        'brand',
+        'color',
+        'size',
     ];
 
     // Bu ürünün ait olduğu kategori ilişkisi
