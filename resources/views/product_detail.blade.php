@@ -107,35 +107,58 @@
     </div>
 
     <!-- MÜŞTERİ YORUMLARI BÖLÜMÜ (CUSTOMER REVIEWS) -->
-    <div class="row mt-5 pt-5 border-top">
-        <div class="col-12">
-            <h3 class="fw-bold mb-4"><i class="fa-regular fa-comments text-orange me-2"></i> Customer Reviews</h3>
-
-            <!-- Örnek Hazır Yorum 1 -->
-            <div class="bg-white p-4 rounded-3 shadow-sm mb-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="fw-bold mb-0">Emma W. <span class="badge bg-light text-success border border-success-subtle ms-2"><i class="fa-solid fa-circle-check"></i> Verified Purchaser</span></h6>
-                    <small class="text-muted">3 days ago</small>
+    <div class="mt-5">
+        <h5>Customer Reviews ({{ $product->comments->count() }})</h5>
+        @foreach($product->comments as $comment)
+            <div class="card mb-3 p-3 border-0 shadow-sm rounded-3">
+                <div class="d-flex justify-content-between">
+                    <strong>{{ $comment->user->name }}</strong>
+                    <span class="text-warning">
+                    @for($i=1; $i<=5; $i++)
+                            <i class="fa-{{ $i <= $comment->rate ? 'solid' : 'regular' }} fa-star"></i>
+                        @endfor
+                </span>
                 </div>
-                <div class="mb-2">
-                    <i class="fa-solid fa-star review-star"></i><i class="fa-solid fa-star review-star"></i><i class="fa-solid fa-star review-star"></i><i class="fa-solid fa-star review-star"></i><i class="fa-solid fa-star review-star"></i>
-                </div>
-                <p class="text-secondary mb-0">Absolutely loved the packaging and speed of delivery! The item quality matches Merve Shop's premium standards perfectly. Highly recommended.</p>
+                <h6 class="text-muted small mt-1">{{ $comment->subject }}</h6>
+                <p class="mb-0 mt-2 small text-secondary">{{ $comment->review }}</p>
             </div>
-
-            <!-- Örnek Hazır Yorum 2 -->
-            <div class="bg-white p-4 rounded-3 shadow-sm mb-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="fw-bold mb-0">John D.</h6>
-                    <small class="text-muted">1 week ago</small>
-                </div>
-                <div class="mb-2">
-                    <i class="fa-solid fa-star review-star"></i><i class="fa-solid fa-star review-star"></i><i class="fa-solid fa-star review-star"></i><i class="fa-solid fa-star review-star"></i><i class="fa-regular fa-star text-muted"></i>
-                </div>
-                <p class="text-secondary mb-0">Great price-to-performance value. Super fast customer service responses from the Elite chat hub too.</p>
-            </div>
-        </div>
+        @endforeach
     </div>
+
+    @auth
+        <div class="card p-4 mt-4 border-0 shadow-sm rounded-3">
+            <h5 class="fw-bold mb-3">Write a Review</h5>
+            <form action="{{ route('product.storeComment') }}" method="POST">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Subject</label>
+                    <input type="text" name="subject" class="form-control" placeholder="Review summary...">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Your Review</label>
+                    <textarea name="review" class="form-control" rows="3" required placeholder="Share your experience..."></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-semibold">Rating</label>
+                    <select name="rate" class="form-select">
+                        <option value="5">⭐⭐★★★ (5 - Excellent)</option>
+                        <option value="4">⭐⭐⭐⭐☆ (4 - Good)</option>
+                        <option value="3">⭐⭐⭐☆☆ (3 - Average)</option>
+                        <option value="2">⭐⭐☆☆☆ (2 - Poor)</option>
+                        <option value="1">⭐☆☆☆☆ (1 - Terrible)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-orange w-100 py-2.5 fw-bold">Submit Review</button>
+            </form>
+        </div>
+    @else
+        <div class="alert alert-info mt-4">Please <a href="{{ route('login') }}">login</a> to write a review.</div>
+    @endauth
 </div>
 <script>
     function toggleWishlist(button) {

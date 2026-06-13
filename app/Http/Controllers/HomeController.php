@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category; // Kategoriler
-
+use App\Models\Message;
 class HomeController extends Controller
 {
     public function index(\Illuminate\Http\Request $request)
@@ -64,6 +64,35 @@ class HomeController extends Controller
 
         // Verileri jilet gibi welcome.blade.php dosyasına gönderiyoruz
         return view('welcome', compact('products', 'categories', 'brands', 'colors'));
+    }
+
+    public function contact()
+    {
+        return view('home.contact'); // veya senin ön yüz klasör yapına göre 'contact'
+    }
+
+// İletişim Formunu Veritabanına Kaydet
+    public function storeMessage(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:100',
+            'phone' => 'nullable|string|max:20',
+            'subject' => 'nullable|string|max:200',
+            'message' => 'required|string',
+        ]);
+
+        Message::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'ip' => $request->ip(),
+            'status' => 'New'
+        ]);
+
+        return back()->with('success', 'Your message has been transmitted to Merve Shop headquarters successfully.');
     }
 
     public function aboutUs()

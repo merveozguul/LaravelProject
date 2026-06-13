@@ -16,9 +16,9 @@ class AdminUserSeeder extends Seeder
         $customerRole = Role::firstOrCreate(['name' => 'customer', 'description' => 'Regular customer role']);
 
         $adminUser = User::firstOrCreate(
-            ['email' => 'admin@mysite.com'], // Giriş e-postam
+            ['email' => 'admin@merveshop.com'], // Giriş e-postam
             [
-                'name' => 'Admin User',
+                'name' => 'Admin',
                 'password' => Hash::make('12345678'), // Giriş şifrem: 12345678
             ]
         );

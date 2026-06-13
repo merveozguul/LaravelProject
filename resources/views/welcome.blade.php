@@ -140,6 +140,10 @@
             <a href="{{ route('my.coupons') }}" class="text-secondary text-decoration-none hover-orange">My Discount Coupons</a>
             <a href="{{ route('about.us') }}" class="text-secondary text-decoration-none hover-orange">About Us</a>
             <a href="{{ route('help.support') }}" class="text-secondary text-decoration-none hover-orange"><i class="fa-solid fa-headset me-1"></i> Help & Support</a>
+
+            <a href="{{ route('contact') }}" class="text-secondary text-decoration-none hover-orange">
+                <i class="fa-regular fa-envelope me-1 text-orange"></i> Contact Us
+            </a>
         </div>
     </div>
 
@@ -290,12 +294,7 @@
                 <img src="{{ asset('uploads/sliders/TechDays.png') }}" class="d-block w-100" alt="Tech Days">
             </div>
             <div class="carousel-item">
-                <img src="{{ asset('uploads/sliders/summer-season.jpg') }}" class="d-block w-100" alt="Summer">
-                <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-50 p-4 rounded-3" style="max-width: 450px; bottom: 40px; left: 40px;">
-                    <span class="badge bg-success mb-2 fs-6">NEW SEASON</span>
-                    <h3 class="fw-bold">Show your style.</h3>
-                    <p>The trendiest summer style outfits and combinations are delivered to your door with Merve Shop quality.</p>
-                </div>
+                <img src="{{ asset('uploads/sliders/dressale.png') }}" class="d-block w-100" alt="Dress">
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#promoSlider" data-bs-slide="prev">
@@ -486,6 +485,9 @@
     <div class="container text-center">
         <p class="mb-1 fw-bold">merve<span style="color: #f27a1a;">shop</span> © 2026</p>
         <small class="text-muted">Merve Shop is at your service with its modern e-commerce structure.</small>
+        <a href="{{ route('contact') }}" class="text-secondary text-decoration-none small">
+            <i class="fa-solid fa-headset me-1 text-orange"></i> Customer Support & Contact
+        </a>
     </div>
 </footer>
 

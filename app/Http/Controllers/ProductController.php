@@ -9,7 +9,6 @@ use App\Models\Category; // Ürün eklerken kategorileri seçtirebilmek için Ka
 class ProductController extends Controller
 {
     // 1. Ürünleri Listeleme Sayfası
-    // 🛒 1. FONKSİYON: Ziyaretçilerin gördüğü Müşteri Ana Sayfası
     public function index(Request $request)
     {
         $categories = \App\Models\Category::all();
@@ -72,27 +71,44 @@ class ProductController extends Controller
         return view('admin.product.create', compact('categories'));
     }
 
-    // 3. Formdan Gelen Ürün Verisini Kaydetme
     public function store(Request $request)
     {
-        // Gelen verileri doğrula (Validation)
+        // 1. Verileri Doğruluyoruz
         $request->validate([
-            'category_id' => 'required|exists:categories,id', // Gelen kategori ID veritabanında var mı?
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0', // Fiyat sayı olmalı ve 0'dan küçük olamaz
-            'stock' => 'required|integer|min:0', // Stok tam sayı olmalı
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'category_id' => 'required|exists:categories,id',
             'brand' => 'nullable|string|max:255',
             'color' => 'nullable|string|max:255',
             'size' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        // Veritabanına ürünü kaydet
-        Product::create($request->all());
+        // 2. Formdan gelen tüm verileri bir diziye alıyoruz
+        $data = $request->all();
 
-        return redirect()->route('admin.products.index')->with('success', 'Product created successfully!');
+        // 3. 🌟 RESİM YÜKLEME MOTORU (Kırık görseli önleyen kısım)
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            // Resme benzersiz bir isim veriyoruz (Örn: 1718219425.jpg)
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+            // Resmi public klasörünün altındaki 'uploads/products' içine taşıyoruz
+            $image->move(public_path('uploads/products'), $imageName);
+
+            // 🚨 Veritabanına kaydedilecek dosya yolunu başına '/' KOYMADAN jilet gibi yazıyoruz:
+            $data['image'] = 'uploads/products/' . $imageName;
+        }
+
+        // 4. Ürünü veritabanına kaydediyoruz
+        \App\Models\Product::create($data);
+
+        // 5. Bağıra bağıra başarı mesajı göndererek listeye geri fırlatıyoruz
+        return redirect()->route('admin.product.index')->with('success', 'Product deployed and published successfully!');
     }
-
     // 4. Ürün Düzenleme Sayfası (Formu Gösterir)
     public function edit(Product $product)
     {
@@ -130,13 +146,13 @@ class ProductController extends Controller
         // Verileri güncelliyoruz
         $product->update($data);
 
-        return redirect()->route('admin.product.index')->with('success', 'Ürün başarıyla güncellendi!');
+        return redirect()->route('admin.product.index')->with('success', 'The product has been successfully updated!');
     }
 
     // 6. Ürünü Veritabanından Siler
     public function destroy(Product $product)
     {
         $product->delete();
-        return redirect()->route('admin.product.index')->with('success', 'Ürün başarıyla silindi!');
+        return redirect()->route('admin.product.index')->with('success', 'Product successfully deleted!');
     }
 }

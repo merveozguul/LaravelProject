@@ -251,9 +251,9 @@
                         <span class="fw-bold text-orange fs-4">{{ number_format($total, 2) }} TL</span>
                     </div>
 
-                    <button class="btn btn-checkout py-3" onclick="alert('Proceeding to checkout secure payment gateway...')">
+                    <a href="{{ route('cart.checkout') }}" class="btn btn-checkout py-3 d-block text-center text-decoration-none">
                         <i class="fa-solid fa-credit-card me-2"></i> Proceed to Checkout
-                    </button>
+                    </a>
 
                     <div class="text-center mt-3">
                         <a href="{{ route('home') }}" class="text-secondary text-decoration-none small hover-orange">

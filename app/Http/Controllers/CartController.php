@@ -75,49 +75,4 @@ class CartController extends Controller
 
         return redirect()->back()->with('success', 'Cart updated successfully!');
     }
-
-    // 4. Siparişi Onaylar ve Stokları Azaltır
-    public function checkout()
-    {
-        $cart = session()->get('cart', []);
-
-        if (count($cart) == 0) {
-            return redirect()->back()->with('error', 'Your shopping cart is empty, so you cannot place an order.');
-        }
-
-        // Önce stok tarama
-        foreach ($cart as $id => $item) {
-            $product = Product::find($id);
-
-            // Eğer ürün silindiyse veya sepetteki miktar stoktan fazlaysa siparişi komple durdur
-            if (!$product || $item['quantity'] > $product->stock) {
-                return redirect()->route('cart.index')->with('error', "An error occurred during the ordering process! '{$item['name']}' The product is either out of stock or no longer available.");
-            }
-        }
-
-        // Siparişi kaydedip stokları düş.
-        $totalAmount = 0;
-        foreach ($cart as $item) {
-            $totalAmount += $item['price'] * $item['quantity'];
-        }
-
-        // Siparişi oluştur
-        Order::create([
-            'user_id' => auth()->id(),
-            'total_amount' => $totalAmount,
-            'status' => 'Pending'
-        ]);
-
-        // VERİTABANINDAN STOKLARI DÜŞ
-        foreach ($cart as $id => $item) {
-            $product = Product::find($id);
-            $product->stock = $product->stock - $item['quantity'];
-            $product->save(); // Yeni stoğu MySQL'e kaydet
-        }
-
-        // Sepeti temizle
-        session()->forget('cart');
-
-        return redirect()->route('home')->with('success', 'Your order has been successfully received! Stock levels have been updated.');
-    }
 }

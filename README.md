@@ -1,59 +1,125 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# merve<span style="color:#f27a1a">shop</span> - Advanced E-Commerce Ecosystem
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+An advanced, enterprise-grade e-commerce application developed as an academic showcase for modern web architectures. The system features secure transaction pipelines, asynchronous state management, dynamic role-based access control (RBAC), automatic financial metrics calculation, and professional administrative ledgers.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🎓 Academic Credentials
+* **Developer:** Merve Özgül
+* **Student ID:** 20232022024
+* **Institution:** İstanbul Nişantaşı Üniversitesi
+* **Course:** Advanced Web Programming
+* **Project Type:** Final Assignment
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🔐 Turnkey Administrative Access (Testing Credentials)
+To bypass the manual registration pipeline during grading, utilize the pre-seeded administrative master account:
+* **Admin Portal URL:** `http://127.0.0.1:8000/admin/dashboard`
+* **Identity Username:** `admin@merveshop.com`
+* **Secret Password:** `12345678`
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🚀 Key Architectural Features & Advanced Details
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🛒 1. Safe Checkout & Stock Sentinel Loops
+* Implements robust atomic database operations via **`DB::transaction`** scopes to eliminate database race conditions during multi-item checkout processing.
+* Automatically deducts product inventory quantities immediately upon payment capture.
+* Safeguards relational integrity between core financial receipts (`orders`) and sub-itemized logs (`order_items`).
 
-## Laravel Sponsors
+### 🔑 2. Many-to-Many Security Infrastructure (RBAC)
+* Features an advanced User-Role architecture using standard pivot tables (`role_user`).
+* Admins can dynamically delegate, authorize, or strip access privileges (e.g., *Admin*, *User*) from a specialized administrative dashboard utilizing Eloquent's **`attach()`** and **`detach()`** mechanisms.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 📉 3. Dynamic Discount Matrix & Inventory Controls
+* **Granular Discount Tweaks:** Admins can alter discount percentages and promotional price matrices per product directly from the backend dashboard. The system instantly recalculates values on the storefront view.
+* **Live Analytics HUD:** The Orders & Sales workspace utilizes optimized aggregate collections (`->items()->sum()` & `->items()->avg()`) to bypass traditional memory leaks, parsing historical order payloads to display live **Gross Revenue** and **Average Basket** KPIs instantly.
 
-### Premium Partners
+### 💬 4. Moderated Feedback Loop & Star Ratings
+* Customers can leave structured feedback, summaries, and 1-5 star ratings directly on product detail nodes.
+* Contains a robust defense mechanism where incoming comments default to a `Pending` state, requiring manual verification from the admin dashboard before entering the public storefront space.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### ✉️ 5. Corporate Contact & Security Audit Trails
+* A dedicated communication interface equipped with client IP logging capabilities for strict security auditing.
+* Allows administrative staff to append private corporate notes to customer inquiries, update ticket processing statuses (`New`, `Read`, `Replied`), and archive logs seamlessly.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🛠️ Technological Blueprints
+* **Backend Framework:** Laravel 12.x (PHP 8.2+)
+* **Database Management:** MySQL 8.0+
+* **Frontend Scaffolding:** Bootstrap 5, FontAwesome 6
+* **UX/UI Interactivity:** SweetAlert2 (Dynamic toast notifications and pipeline confirmations)
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## ⚙️ Installation & Deployment Ledger
 
-## Security Vulnerabilities
+Follow these sequential steps to establish a local mirror of the workspace:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 1. Clone the Repository
+```bash
+git clone [https://github.com/merveozguul/LaravelProject.git](https://github.com/merveozguul/LaravelProject.git)
+cd LaravelProject
+```
 
-## License
+### 2. Dependency Resolution
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Pull down all foundational vendor libraries specified in the composer lockfile:
+
+```bash
+composer install
+```
+
+### 3. XAMPP Server Initialization & Environment Setup
+
+Before configuring the application database, ensure your local server architecture is up and running:
+
+1. Open the **XAMPP Control Panel** on your machine.
+2. Initialize and start both the **Apache** and **MySQL** services.
+3. Access `http://localhost/phpmyadmin` and create a tresh blank database named `ecommerce_db`.
+
+Next, replicate the baseline environment blueprint and configure your local connection parameters:
+
+```bash
+cp .env.example .env
+```
+
+*Open the freshly generated `.env` file and adjust your database connection coordinates to match XAMPP defaults:*
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=ecommerce_db
+DB_USERNAME=root
+DB_PASSWORD=
+
+```
+
+### 4. Cryptographic Key Inception
+
+```bash
+php artisan key:generate
+
+```
+
+### 5. Database Schema Inception & Core Seeding
+
+Execute database migrations to construct the physical tables inside your XAMPP MySQL server and spin up essential roles along with the master admin user:
+
+```bash
+php artisan migrate --seed
+
+```
+
+### 6. Flush System Cache & Initialize Engine
+
+```bash
+php artisan optimize:clear
+php artisan serve
+
+```
+
+*The local storefront environment will now be operational at `http://127.0.0.1:8000`.*

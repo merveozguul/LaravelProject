@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    use HasFactory;
     // Formdan toplu veri girişine izin verdiğim ürün sütunları
     protected $fillable = [
         'category_id',
@@ -21,6 +23,11 @@ class Product extends Model
         'color',
         'size',
     ];
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->where('status', 'True');
+    }
 
     // Bu ürünün ait olduğu kategori ilişkisi
     public function category()

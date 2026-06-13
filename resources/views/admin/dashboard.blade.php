@@ -100,6 +100,21 @@
                         <i class="fa-solid fa-receipt me-2"></i> Orders & Sales
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.comments.index') }}">
+                        <i class="fa-solid fa-comments me-2"></i> Product Reviews
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.users.index') }}">
+                        <i class="fa-solid fa-users me-2"></i> Users Management
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.messages.index') }}">
+                        <i class="fa-solid fa-envelope me-2"></i> Contact Messages
+                    </a>
+                </li>
             </ul>
 
             <hr class="text-secondary">

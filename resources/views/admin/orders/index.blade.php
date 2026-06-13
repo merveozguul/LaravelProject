@@ -121,6 +121,21 @@
                         <i class="fa-solid fa-receipt me-2"></i> Orders & Sales
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.comments.index') }}">
+                        <i class="fa-solid fa-comments me-2"></i> Product Reviews
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.users.index') }}">
+                        <i class="fa-solid fa-users me-2"></i> Users Management
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.messages.index') }}">
+                        <i class="fa-solid fa-envelope me-2"></i> Contact Messages
+                    </a>
+                </li>
             </ul>
 
             <hr class="text-secondary">
@@ -165,7 +180,7 @@
                     <div class="card mini-stat-card stat-success p-3">
                         <small class="text-muted text-uppercase fw-bold" style="font-size: 11px;">Gross Revenue</small>
                         <h5 class="fw-bold text-success mb-0 mt-1">
-                            {{ number_format(collect($orders ?? [])->sum('total_amount'), 2) }} TL
+                            {{ number_format(collect($orders->items())->sum('total_amount'), 2) }} TL
                         </h5>
                     </div>
                 </div>
@@ -173,7 +188,7 @@
                     <div class="card mini-stat-card stat-info p-3">
                         <small class="text-muted text-uppercase fw-bold" style="font-size: 11px;">Average Basket</small>
                         <h5 class="fw-bold text-dark mb-0 mt-1">
-                            {{ count($orders ?? []) > 0 ? number_format(collect($orders ?? [])->avg('total_amount'), 2) : '0.00' }} TL
+                            {{ count($orders->items()) > 0 ? number_format(collect($orders->items())->avg('total_amount'), 2) : '0.00' }} TL
                         </h5>
                     </div>
                 </div>
@@ -192,6 +207,7 @@
                             <th>Total Amount</th>
                             <th>Payment Status</th>
                             <th>Fulfillment</th>
+                            <th class="text-end" style="width: 120px;">Actions</th> </tr>
                         </tr>
                         </thead>
                         <tbody>
@@ -220,7 +236,7 @@
 
                                 <!-- Financial Total Revenue Column -->
                                 <td class="fw-bold text-dark">
-                                    {{ number_format($order->total_amount, 2) }} TL
+                                    {{ number_format($order->total, 2) }} TL
                                 </td>
 
                                 <!-- Dynamic Payment status badge indicators -->
@@ -242,6 +258,12 @@
                                             <i class="fa-solid fa-truck-fast me-1 text-primary"></i>
                                             {{ $order->status ?? 'Processing' }}
                                         </span>
+                                </td>
+
+                                <td class="text-end">
+                                    <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-outline-dark rounded-3 fw-semibold shadow-sm px-2.5 py-1.5" style="font-size: 12px;">
+                                        <i class="fa-solid fa-eye text-orange me-1"></i> View & Manage
+                                    </a>
                                 </td>
                             </tr>
                         @empty
